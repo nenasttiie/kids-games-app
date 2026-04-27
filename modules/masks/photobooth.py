@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 import mediapipe as mp
 import numpy as np
 import time
+import os
 
 
 class PhotoBoothApp:
@@ -12,12 +13,10 @@ class PhotoBoothApp:
         self.window.title("Фотобудка")
 
         self.window.configure(bg='#ffe6f0')
-        self.window.geometry('700x650')
+        self._apply_shared_geometry()
 
         self.window.update_idletasks()
-        x = (self.window.winfo_screenwidth() // 2) - (700 // 2)
-        y = (self.window.winfo_screenheight() // 2) - (650 // 2)
-        self.window.geometry(f'700x650+{x}+{y}')
+
 
         self.cap = cv2.VideoCapture(0)
         self.mp_face_mesh = mp.solutions.face_mesh
@@ -93,11 +92,22 @@ class PhotoBoothApp:
         self.photo_btn.bind("<Enter>", on_enter_photo)
         self.photo_btn.bind("<Leave>", on_leave_photo)
 
-        self.label = tk.Label(window, text="Улыбнись! Ты прекрасна!",
+        self.label = tk.Label(window, text="Улыбнись!",
                               font=('Comic Sans MS', 12, 'italic'), bg='#ffe6f0', fg='#cc6699')
         self.label.pack(pady=5)
 
         self.update()
+
+    def _apply_shared_geometry(self):
+        x = os.getenv("APP_WINDOW_X")
+        y = os.getenv("APP_WINDOW_Y")
+        w = os.getenv("APP_WINDOW_W")
+        h = os.getenv("APP_WINDOW_H")
+
+        if x and y and w and h:
+            self.window.geometry(f"{w}x{h}+{x}+{y}")
+        else:
+            self.window.geometry("720x720")
 
     def set_filter(self, mode):
         self.current_filter = mode

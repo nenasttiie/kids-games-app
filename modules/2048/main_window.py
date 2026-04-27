@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QTableWidget, QTableWidgetItem, QMessageBox, \
@@ -12,7 +13,7 @@ class MainWindow(QWidget):
         super().__init__()
         self.game = game
         self.setWindowTitle("Game 2048")
-        self.setGeometry(550, 250, 700, 600)
+        self._apply_shared_geometry()
         self.setFocusPolicy(Qt.StrongFocus)
         self.setWindowIcon(QIcon('rabbit.ico'))
 
@@ -160,6 +161,21 @@ class MainWindow(QWidget):
                 self.show_win_messagebox()
             if self.game.status == GameStatus.LOSE:
                 self.show_lose_messagebox()
+
+    def _apply_shared_geometry(self):
+        x = os.getenv("APP_WINDOW_X")
+        y = os.getenv("APP_WINDOW_Y")
+        w = os.getenv("APP_WINDOW_W")
+        h = os.getenv("APP_WINDOW_H")
+
+        if x and y and w and h:
+            try:
+                self.setGeometry(int(x), int(y), int(w), int(h))
+                return
+            except ValueError:
+                pass
+
+
 
 
 if __name__ == '__main__':

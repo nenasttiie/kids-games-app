@@ -1,14 +1,16 @@
 import turtle
+import os
 
 
 def setup_drawing():
+    screen = turtle.Screen()
+    apply_shared_geometry(screen)
     t = turtle.Turtle()
     t.ondrag(t.goto)
-    screen = turtle.Screen()
 
     screen.title("Рисовалка с черепашкой")
     screen.bgcolor("white")
-    screen.setup(700, 600)
+
 
     root = screen._root
     root.iconbitmap("2048/rabbit.ico")
@@ -68,6 +70,22 @@ def setup_drawing():
     screen.listen()
 
     turtle.mainloop()
+
+
+def apply_shared_geometry(screen):
+    x = os.getenv("APP_WINDOW_X")
+    y = os.getenv("APP_WINDOW_Y")
+    w = os.getenv("APP_WINDOW_W")
+    h = os.getenv("APP_WINDOW_H")
+
+    if x and y and w and h:
+        try:
+            screen.setup(width=int(w), height=int(h), startx=int(x), starty=int(y))
+            return
+        except ValueError:
+            pass
+
+    screen.setup(700, 600)
 
 
 if __name__ == "__main__":
