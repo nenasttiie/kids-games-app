@@ -11,7 +11,6 @@ def setup_drawing():
     screen.title("Рисовалка с черепашкой")
     screen.bgcolor("white")
 
-
     root = screen._root
     root.iconbitmap("2048/rabbit.ico")
 

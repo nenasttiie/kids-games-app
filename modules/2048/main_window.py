@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QTableWi
 from game import Game, GameStatus
 from vector import Vector
 
+
 class MainWindow(QWidget):
     def __init__(self, game):
         super().__init__()
@@ -107,7 +108,6 @@ class MainWindow(QWidget):
             except ValueError:
                 pass
 
-
     def show_lose_messagebox(self):
         msg = QMessageBox()
         custom_icon = QIcon('ch.ico')
@@ -147,7 +147,7 @@ class MainWindow(QWidget):
 
     def keyPressEvent(self, event):
         direction_map = {
-            Qt.Key_Up: Vector(-1,0),
+            Qt.Key_Up: Vector(-1, 0),
             Qt.Key_Down: Vector(1, 0),
             Qt.Key_Right: Vector(0, 1),
             Qt.Key_Left: Vector(0, -1)
@@ -155,7 +155,6 @@ class MainWindow(QWidget):
 
         if event.key() in direction_map:
             self.game.shift(direction_map[event.key()])
-            # self.label_points.setText(f"Счет: {self.game.points}")
             self.update_table()
             if self.game.status == GameStatus.WIN:
                 self.show_win_messagebox()
@@ -174,8 +173,6 @@ class MainWindow(QWidget):
                 return
             except ValueError:
                 pass
-
-
 
 
 if __name__ == '__main__':

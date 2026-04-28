@@ -17,7 +17,6 @@ class PhotoBoothApp:
 
         self.window.update_idletasks()
 
-
         self.cap = cv2.VideoCapture(0)
         self.mp_face_mesh = mp.solutions.face_mesh
         self.face_mesh = self.mp_face_mesh.FaceMesh(refine_landmarks=True)
@@ -79,22 +78,22 @@ class PhotoBoothApp:
         scrollbar.pack(side=tk.BOTTOM, fill=tk.X)
 
         self.photo_btn = tk.Button(window, text="СДЕЛАТЬ ФОТО", bg='#ff6699', fg='white',
-                                   font=('Comic Sans MS', 14, 'bold'), command=self.take_snapshot,
-                                   relief=tk.RAISED, bd=5, cursor='hand2', height=2, width=20)
-        self.photo_btn.pack(pady=15)
+                                   font=('Comic Sans MS', 11, 'bold'), command=self.take_snapshot,
+                                   relief=tk.RAISED, bd=4, cursor='hand2', height=1, padx=14, pady=4)
+        self.photo_btn.pack(fill=tk.X, padx=170, pady=12)
 
         def on_enter_photo(e):
-            self.photo_btn.config(bg='#ff3366', font=('Comic Sans MS', 15, 'bold'))
+            self.photo_btn.config(bg='#ff3366', font=('Comic Sans MS', 12, 'bold'))
 
         def on_leave_photo(e):
-            self.photo_btn.config(bg='#ff6699', font=('Comic Sans MS', 14, 'bold'))
+            self.photo_btn.config(bg='#ff6699', font=('Comic Sans MS', 11, 'bold'))
 
         self.photo_btn.bind("<Enter>", on_enter_photo)
         self.photo_btn.bind("<Leave>", on_leave_photo)
 
-        self.label = tk.Label(window, text="Улыбнись!",
+        self.label = tk.Label(window, text="",
                               font=('Comic Sans MS', 12, 'italic'), bg='#ffe6f0', fg='#cc6699')
-        self.label.pack(pady=5)
+        self.label.pack(pady=(0, 4))
 
         self.update()
 
@@ -103,16 +102,19 @@ class PhotoBoothApp:
         y = os.getenv("APP_WINDOW_Y")
         w = os.getenv("APP_WINDOW_W")
         h = os.getenv("APP_WINDOW_H")
+        min_width = 900
+        min_height = 780
 
         if x and y and w and h:
-            self.window.geometry(f"{w}x{h}+{x}+{y}")
+            width = max(int(w), min_width)
+            height = max(int(h), min_height)
+            self.window.geometry(f"{width}x{height}+{x}+{y}")
         else:
-            self.window.geometry("720x720")
+            self.window.geometry(f"{min_width}x{min_height}")
 
     def set_filter(self, mode):
         self.current_filter = mode
         self.label.config(text=f"Фильтр: {mode}")
-        self.window.after(1500, lambda: self.label.config(text="Улыбнись! Ты прекрасна!"))
 
     def apply_sepia(self, frame):
         kernel = np.array([[0.272, 0.534, 0.131],
